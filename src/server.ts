@@ -10,7 +10,7 @@ export class SetupServer extends Server {
 
   public init(): void {
     this.setupExpress();
-    this.setupControllers()
+    this.setupControllers();
   }
 
   public getApp(): Application {
@@ -23,6 +23,6 @@ export class SetupServer extends Server {
 
   private setupControllers(): void {
     const forecastController = new ForecastController();
-    this.addControllers([forecastController])
+    this.addControllers([forecastController]);
   }
 }
