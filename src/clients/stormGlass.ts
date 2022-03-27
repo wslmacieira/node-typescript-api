@@ -1,5 +1,4 @@
-import { AxiosStatic } from 'axios';
-import { InternalError } from '../util/errors/internal-error';
+import { InternalError } from '@src/util/errors/internal-error';
 import config, { IConfig } from 'config';
 import * as HTTPUtil from '@src/util/request';
 
@@ -72,7 +71,7 @@ export class StormGlass {
         }
       );
       return this.normalizeResponse(response.data);
-    } catch (err: any) {
+    } catch (err) {
       if (HTTPUtil.Request.isRequestError(err)) {
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${

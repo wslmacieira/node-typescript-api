@@ -1,7 +1,7 @@
 import { Controller, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { Beach } from '../models/beach';
+import { Beach } from '@src/models/beach';
 
 @Controller('beaches')
 export class BeachesController {

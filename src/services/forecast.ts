@@ -1,13 +1,13 @@
-import { ForecastPoint, StormGlass } from '../clients/stormGlass';
-import { Beach } from '../models/beach';
-import { InternalError } from '../util/errors/internal-error';
+import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
+import { InternalError } from '@src/util/errors/internal-error';
+import { Beach } from '@src/models/beach';
+
+export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
 
 export interface TimeForecast {
   time: string;
   forecast: BeachForecast[];
 }
-
-export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
 
 export class ForecastProcessingInternalError extends InternalError {
   constructor(message: string) {
@@ -29,7 +29,7 @@ export class Forecast {
         pointsWithCorrectSources.push(...enrichedBeachData);
       }
       return this.mapForecastByTime(pointsWithCorrectSources);
-    } catch (error: any) {
+    } catch (error) {
       throw new ForecastProcessingInternalError(error.message);
     }
   }
