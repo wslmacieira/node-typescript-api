@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { User } from '@src/models/users';
 import { BaseController } from '.';
 import AuthService from '../services/auth';
+import logger from '../logger';
 
 @Controller('users')
 export class UsersController extends BaseController {
@@ -13,6 +14,7 @@ export class UsersController extends BaseController {
       const newUser = await user.save();
       res.status(201).send(newUser);
     } catch (error) {
+      logger.error(error);
       this.sendCreatedUpdatedErrorResponse(res, error);
     }
   }
