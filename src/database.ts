@@ -8,3 +8,5 @@ export const connect = async (): Promise<void> => {
 };
 
 export const close = (): Promise<void> => connection.close();
+
+export const dropDatabase = (): Promise<void> => connection.dropDatabase();
