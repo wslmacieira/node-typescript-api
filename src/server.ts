@@ -1,13 +1,17 @@
 import './util/module-alias';
-import { Server } from '@overnightjs/core';
 import express, { Application } from 'express';
-import { ForecastController } from './controllers/forecast';
-import { BeachesController } from './controllers/beaches';
+import { Server } from '@overnightjs/core';
 import * as database from '@src/database';
+import * as http from 'http';
+import expressPino from 'express-pino-logger';
+import cors from 'cors';
+import { BeachesController } from './controllers/beaches';
+import { ForecastController } from './controllers/forecast';
 import { UsersController } from './controllers/users';
 import logger from './logger';
 
 export class SetupServer extends Server {
+  private server?: http.Server;
   constructor(private port = 3000) {
     super();
   }
@@ -24,6 +28,8 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(express.json());
+    this.app.use(expressPino({ logger }));
+    this.app.use(cors({ origin: '*' }));
   }
 
   private setupControllers(): void {
@@ -43,6 +49,16 @@ export class SetupServer extends Server {
 
   public async close(): Promise<void> {
     await database.close();
+    if (this.server) {
+      await new Promise((resolve, reject) => {
+        this.server?.close((err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(true);
+        });
+      });
+    }
   }
 
   public async dropDatabase(): Promise<void> {
