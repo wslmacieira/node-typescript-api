@@ -9,7 +9,8 @@ import { BeachesController } from './controllers/beaches';
 import { ForecastController } from './controllers/forecast';
 import { UsersController } from './controllers/users';
 import logger from './logger';
-import { requestLoggerMiddleware } from './middlewares/request-logger';
+import { httpLoggerMiddleware } from './middlewares/http-logger';
+import { randomUUID } from 'crypto';
 
 export class SetupServer extends Server {
   private server?: http.Server;
@@ -29,17 +30,18 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(express.json());
-    this.app.use(requestLoggerMiddleware);
+    this.app.use(httpLoggerMiddleware);
     this.app.use(
       expressPino({
         logger,
         serializers: {
           req: (req) => {
-            req.body = req.raw.body;
+            req.requestBody = req.raw.body;
+            req.id = randomUUID();
             return req;
           },
           res: (res) => {
-            res.content = res.raw.contentBody;
+            res.responseBody = res.raw.contentBody;
             return res;
           },
         },

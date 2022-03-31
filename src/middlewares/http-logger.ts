@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Send } from 'express';
 
-export function requestLoggerMiddleware(
+export function httpLoggerMiddleware(
   _: Request,
   res: Response,
   next: NextFunction
