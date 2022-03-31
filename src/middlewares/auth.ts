@@ -6,12 +6,16 @@ export function authMiddleware(
   res: Partial<Response>,
   next: NextFunction
 ): void {
-  const token = req.headers?.['x-access-token'];
   try {
+    const token = req.headers?.['x-access-token'];
     const decoded = AuthService.decodedToken(token as string);
     req.decoded = decoded;
+    next();
   } catch (error) {
-    res.status?.(401).send({ code: 401, error: error.message });
+    if (error instanceof Error) {
+      res.status?.(401).send({ code: 401, error: error.message });
+    } else {
+      res.status?.(401).send({ code: 401, error: 'Unknown auth error' });
+    }
   }
-  next();
 }
