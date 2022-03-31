@@ -1,5 +1,5 @@
 import './util/module-alias';
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import { Server } from '@overnightjs/core';
 import * as database from '@src/database';
 import * as http from 'http';
@@ -9,6 +9,7 @@ import { BeachesController } from './controllers/beaches';
 import { ForecastController } from './controllers/forecast';
 import { UsersController } from './controllers/users';
 import logger from './logger';
+import { requestLoggerMiddleware } from './middlewares/request-logger';
 
 export class SetupServer extends Server {
   private server?: http.Server;
@@ -28,7 +29,22 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(express.json());
-    this.app.use(expressPino({ logger }));
+    this.app.use(requestLoggerMiddleware);
+    this.app.use(
+      expressPino({
+        logger,
+        serializers: {
+          req: (req) => {
+            req.body = req.raw.body;
+            return req;
+          },
+          res: (res) => {
+            res.content = res.raw.contentBody;
+            return res;
+          },
+        },
+      })
+    );
     this.app.use(cors({ origin: '*' }));
   }
 

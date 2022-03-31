@@ -5,4 +5,7 @@ declare module 'express-serve-static-core' {
   export interface Request extends http.IncomingMessage, Express.Request {
     decoded?: DecodedUser;
   }
+  export interface Response extends http.IncomingMessage, Express.Response {
+    contentBody?: any;
+  }
 }
