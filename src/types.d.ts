@@ -2,10 +2,10 @@ import * as http from 'http';
 import { DecodedUser } from './services/auth';
 
 declare module 'express-serve-static-core' {
-  export interface Request extends http.IncomingMessage, Express.Request {
+  export interface Request extends Express.Request {
     decoded?: DecodedUser;
   }
-  export interface Response extends http.IncomingMessage, Express.Response {
+  export interface Response extends Express.Response {
     contentBody?: any;
   }
 }
