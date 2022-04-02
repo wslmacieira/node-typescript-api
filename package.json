@@ -9,9 +9,10 @@
     "start:local": "ts-node-dev --transpile-only --respawn -- src/index.ts | pino-pretty -c",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "npm run lint -- --fix",
-    "test": "npm run test:unit && npm run test:functional",
+    "test": "jest",
     "test:functional": "jest --projects ./test --runInBand",
     "test:unit": "jest",
+    "test:ci": "npm run test:unit && npm run test:functional",
     "style:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "style:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
