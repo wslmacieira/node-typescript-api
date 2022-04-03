@@ -7,7 +7,7 @@ export interface RequestLogger {
   headers: RequestHeader;
   remoteAddress: string;
   remotePort: number;
-  body: any;
+  body: Request;
 }
 
 export interface ResponseLogger {

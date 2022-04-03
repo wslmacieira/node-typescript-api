@@ -47,6 +47,7 @@ export class Forecast {
     logger.info(`Preparing the forecast for ${beaches.length} beaches`);
     for (const beach of beaches) {
       const rating = new this.RatingService(beach);
+      //TODO someone to make this call in parallel
       const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
       const enrichedBeachData = this.enrichedBeachData(points, beach, rating);
       pointsWithCorrectSources.push(...enrichedBeachData);
