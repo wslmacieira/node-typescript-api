@@ -2,7 +2,8 @@
   "App": {
     "resources": {
       "StormGlass": {
-        "apiToken": "test-token"
+        "apiToken": "test-token",
+        "cacheTtl": 3600
       }
     },
     "database": {

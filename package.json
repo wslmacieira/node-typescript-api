@@ -12,6 +12,7 @@
     "test": " npm run lint && npm run style:check && npm run test:unit && npm run test:functional",
     "test:functional": "jest --projects ./test --runInBand",
     "test:unit": "jest",
+    "test:ci": "jest --projects ./src ./test --coverage --runInBand",
     "style:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "style:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },

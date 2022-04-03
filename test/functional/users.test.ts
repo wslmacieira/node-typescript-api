@@ -58,23 +58,22 @@ describe('Users functional tests', () => {
     it('should generate a token for a valid user', async () => {
       const newUser = {
         name: 'John Doe',
-        email: 'john2@email.com',
+        email: 'john@mail.com',
         password: '1234',
       };
-      await new User(newUser).save();
+      const user = await new User(newUser).save();
       const response = await global.testRequest
         .post('/users/authenticate')
         .send({ email: newUser.email, password: newUser.password });
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(
-        expect.objectContaining({ token: expect.any(String) })
-      );
+
+      const JwtClaims = AuthService.decodedToken(response.body.token);
+      expect(JwtClaims).toMatchObject({ sub: user.id });
     });
 
     it('should return UNAUTHORIZED  if the user with the given email is not found', async () => {
       const newUser = {
         name: 'John Doe',
-        email: 'john3@email.com',
+        email: 'john4@email.com',
         password: '1234',
       };
       await new User(newUser).save();
@@ -97,11 +96,11 @@ describe('When getting user profile info', () => {
   it(`Should return the token's owner profile information`, async () => {
     const newUser = {
       name: 'John Doe',
-      email: 'john@mail.com',
+      email: 'john5@mail.com',
       password: '1234',
     };
     const user = await new User(newUser).save();
-    const token = AuthService.generateToken(user.toJSON());
+    const token = AuthService.generateToken(user.id);
     const { body, status } = await global.testRequest
       .get('/users/me')
       .set({ 'x-access-token': token });

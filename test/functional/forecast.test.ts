@@ -4,6 +4,7 @@ import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
 import { User } from '@src/models/users';
 import AuthService from '@src/services/auth';
+import CacheUtil from '@src/util/cache';
 
 describe('Beach forecast functional tests', () => {
   const defaultUser = {
@@ -24,7 +25,8 @@ describe('Beach forecast functional tests', () => {
       userId: user.id,
     };
     await new Beach(defaultBeach).save();
-    token = AuthService.generateToken(user.toJSON());
+    token = AuthService.generateToken(user.id);
+    CacheUtil.clearAllCache();
   });
   it('should return a forecast with just a few times', async () => {
     nock('https://api.stormglass.io:443', {
