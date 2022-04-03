@@ -16,6 +16,7 @@ import { UsersController } from './controllers/users';
 import logger from './logger';
 import { httpLoggerMiddleware } from './middlewares/http-logger';
 import { randomUUID } from 'crypto';
+import { apiErrorValidator } from './middlewares/api-error-validator';
 
 export class SetupServer extends Server {
   private server?: http.Server;
@@ -28,6 +29,7 @@ export class SetupServer extends Server {
     await this.docsSetup();
     this.setupControllers();
     await this.databaseSetup();
+    this.setupErrorHandlers();
   }
 
   public getApp(): Application {
@@ -39,8 +41,8 @@ export class SetupServer extends Server {
     this.app.use(
       OpenApiValidator.middleware({
         apiSpec: apiSchema as OpenAPIV3.Document,
-        validateRequests: false, //will be implemented in step2
-        validateResponses: false, //will be implemented in step2
+        validateRequests: true, //will be implemented in step2
+        validateResponses: true, //will be implemented in step2
       })
     );
   }
@@ -65,6 +67,10 @@ export class SetupServer extends Server {
       })
     );
     this.app.use(cors({ origin: '*' }));
+  }
+
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
   }
 
   private setupControllers(): void {
